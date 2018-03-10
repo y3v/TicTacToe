@@ -11,6 +11,11 @@ public class TicTacToe extends AppCompatActivity {
 
     private int counter = 0;
     private boolean win = false;
+    private String player1;
+    private String player2;
+    private String player1Win;
+    private String player2Win;
+    private TextView label;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,15 @@ public class TicTacToe extends AppCompatActivity {
             }
         });
 
-        //TextView welcome = findViewById(R.id.te
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            player1 = extras.get("player1").toString() + "'s Turn";
+            player2 = extras.get("player2").toString() + "'s Turn";
+            player1Win = getResources().getString(R.string.winner_is) + " " + extras.get("player1").toString();
+            player2Win = getResources().getString(R.string.winner_is) + " " + extras.get("player2").toString();
+        }
+        label = findViewById(R.id.textView);
+        label.setText(player1);
     }
 
     protected void userClick(Button button){
@@ -57,12 +70,14 @@ public class TicTacToe extends AppCompatActivity {
             if(button.getText().equals("")){
                 button.setText(R.string.x);
                 button.setBackgroundColor(getResources().getColor(R.color.blue));
+                label.setText(player2);
             }
         }
         else{
             if(button.getText().equals("")){
                 button.setText(R.string.o);
                 button.setBackgroundColor(getResources().getColor(R.color.red));
+                label.setText(player1);
             }
         }
         counter++;
@@ -108,7 +123,7 @@ public class TicTacToe extends AppCompatActivity {
             win = true;
             Log.d("myWin", "Game won!");
         }
-        if (input.equals(buttons[2].getText()) && input.equals(buttons[5].getText()) && input.equals(buttons[6].getText())){
+        if (input.equals(buttons[2].getText()) && input.equals(buttons[4].getText()) && input.equals(buttons[6].getText())){
             win = true;
             Log.d("myWin", "Game won!");
         }
@@ -117,10 +132,10 @@ public class TicTacToe extends AppCompatActivity {
         if (win){
             TextView winnerLabel = findViewById(R.id.textView);
             if (input.equals("O")){
-                winnerLabel.setText(R.string.winnerO);
+                winnerLabel.setText(player2Win);
             }
             else{
-                winnerLabel.setText(R.string.winnerX);
+                winnerLabel.setText(player1Win);
             }
 
             for (Button but : buttons) {
@@ -138,7 +153,7 @@ public class TicTacToe extends AppCompatActivity {
             but.setText("");
         }
         restart.setVisibility(View.INVISIBLE);
-        text.setText("");
+        text.setText(player1);
         win = false;
         counter = 0;
     }
